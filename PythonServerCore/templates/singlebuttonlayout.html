@@ -4,14 +4,27 @@
     </head>
     <body>
         <h4>Single Clickable Button Layout</h4>
-        <form method="get" action="" >
+        <form name="singlebuttonlayoutform" method="get" action="singlebuttonaction" >
+            <input type="hidden" name="ID" value="0" />
             {% for buttonName in buttons %}
+            {% set actionUrl="/iot/singlebuttonelout#buttonName="+buttonName %}
                 <br/>
-                <button id={{buttonName}}>{{buttonName}}</button>
+                
+                <!--<button id={{buttonName}} formaction={{actionUrl}}>{{buttonName}} </button>-->
+                <button id={{buttonName}} onClick="BTN_click(this.id)"> {{buttonName}}</button> 
             {% endfor %}
         </form> 
         <br/>
         <a href="/iot">Back To Home</a>
     </body>
+
+    <script> 
+        function BTN_click(clicked) { 
+           var buttonId = "ID = "+clicked; 
+           document.singlebuttonlayoutform.ID.value = clicked;
+           document.getElementById("singlebuttonlayoutform").submit();
+         //console.log(buttonId);
+        }          
+    </script> 
     
 </html>
