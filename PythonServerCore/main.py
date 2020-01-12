@@ -19,11 +19,11 @@ def renderIndex():
 
 @app.route(serverCong["rootcontext"]+"/singlebuttonlayout")
 def renderSingleButtonLoayout():
-    return render_template("/singlebuttonlayout.html",buttons=inputs)
+    return render_template("/singlebuttonlayout.html",buttons=outputs)
 
 @app.route(serverCong["rootcontext"]+"/multibuttonlayout")
 def renderMutiButtonLoayout():
-    return render_template("/multibuttonlayout.html",buttons=inputs)
+    return render_template("/multibuttonlayout.html",buttons=outputs)
 
 @app.route(serverCong["rootcontext"]+"/singlebuttonaction",methods = ['POST', 'GET'])
 def renderSingleButtonAction():
@@ -35,7 +35,8 @@ def renderSingleButtonAction():
         #actionLeds=actionLeds+[leds]
         #print("Following LD will be on")
         #print(actionLeds)
-        gpioservice.GPIO_OUT_Action(outputs,actionLeds,"ON")
+        #gpioservice.GPIO_OUT_Action(outputs,actionLeds,"ON")
+        gpioservice.GPIO_OUT_Toggle(actionLeds)
         return render_template("/singlebuttonlayout.html",buttons=outputs)
     else:
         leds = request.form["ID"]
@@ -51,5 +52,11 @@ def welcome():
     return "Welcome to IOT Service "    
 
 if __name__ == '__main__':
-    app.run(port=serverCong["port"],debug=True)
+    #app.run(host="0.0.0.0",port=80,debug=True)
+    #app.run(debug=True, port=80, host='0.0.0.0')
+    gpioservice.setup_GPIO(inputs,outputs)
+    app.run(debug=True, port=serverCong["port"], host=serverCong["ip"])
+    gpioservice.resetInputs(inputs)
+    gpioservice.resetOutputs(outputs)
+    print("Server killed")
 

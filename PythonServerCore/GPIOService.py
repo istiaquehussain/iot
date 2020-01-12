@@ -1,4 +1,5 @@
 import json
+import RPIGpioService as rpiservice
 def loadGPIOConfig():
     gpioConfig = json.load(open("config/gpioconfig.json"))
     return gpioConfig
@@ -24,13 +25,29 @@ def GPIO_OUT_Action(allOuts,actionOuts,action):
         for id in actionOuts:
             print("Switching OFF ",id)
 
+def GPIO_OUT_Toggle(actionOuts):
+    for pin in actionOuts:
+        if(pin!="D-1"):
+            rpiservice.toggleOutput(pin)
+                
+def reset():
+    rpiservice.reset()  
+    
+def resetInputs(inputs):
+     rpiservice.resetInputs(inputs)
+
+def resetOutputs(outputs):
+        rpiservice.resetOutputs(outputs)    
+
 def setup_GPIO(inputs,outputs):
     print("Setting up GPIOS ...")
     print("INPUTS ...")
     print(inputs)
+    rpiservice.setup_GPI(inputs)
     print("OUTPUTS ...")
     print(outputs)
-
+    rpiservice.setup_GPO(outputs)
+    
 
 
 
